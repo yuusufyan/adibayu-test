@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Hash;
+
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -13,7 +16,11 @@ class UserController extends Controller
     public function index()
     {
         //
-        $users = User::with('roles')->get();
+        $users = User::with('roles')
+            ->whereDoesntHave('roles', function ($query) {
+                $query->where('name', 'admin');
+            })
+            ->get();
         return view('users.index', compact('users'));
     }
 
@@ -65,6 +72,12 @@ class UserController extends Controller
     public function edit(string $id)
     {
         //
+        // Checking apakah user memiliki role admin atau bukan
+        if (!auth()->user()->hasRole('admin')) {
+            abort(401, 'Unauthorized');
+        }
+
+        $user = User::findOrFail($id);
         $roles = Role::all();
         return view('users.edit', compact('user', 'roles'));
     }

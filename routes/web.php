@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
+use Spatie\Permission\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,4 +19,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+// routes/web.php
+Route::middleware([
+    'auth',
+    RoleMiddleware::class . ':admin', // ⬅️ tambahin begini
+])->group(function () {
+    Route::resource('users', UserController::class);
+});
+
+require __DIR__ . '/auth.php';
