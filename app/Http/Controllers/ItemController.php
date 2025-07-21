@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CodeGenerator;
 use App\Models\Items;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -34,23 +35,23 @@ class ItemController extends Controller
     {
         //
         $request->validate([
-            'kode' => 'required|unique:items,kode',
+            // 'kode' => 'required|unique:items,kode',
             'nama' => 'required|string',
             'harga' => 'required|numeric|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $item = new Item();
-        $item->kode = $request->kode;
-        $item->nama = $request->nama;
-        $item->harga = $request->harga;
+        $items = new Items();
+        $items->kode = CodeGenerator::generateItemCode();
+        $items->nama = $request->nama;
+        $items->harga = $request->harga;
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images/items', 'public');
-            $item->image = $imagePath;
+            $items->image = $imagePath;
         }
 
-        $item->save();
+        $items->save();
 
         return redirect()->route('items.index')->with('success', 'Item created successfully.');
     }
@@ -69,7 +70,8 @@ class ItemController extends Controller
     public function edit(string $id)
     {
         //
-        return view('items.edit', compact('item'));
+        $items = Items::findOrFail($id);
+        return view('items.edit', compact('items'));
     }
 
     /**
