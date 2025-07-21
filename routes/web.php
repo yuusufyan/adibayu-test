@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SalesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ItemController;
 use Spatie\Permission\Middleware\RoleMiddleware;
@@ -34,6 +35,17 @@ Route::middleware([
     RoleMiddleware::class . ':admin', // ⬅️ tambahin begini
 ])->group(function () {
     Route::resource('items', ItemController::class);
+    Route::get('/items/{id}/harga', function ($id) {
+        return \App\Models\Items::findOrFail($id)->harga;
+    });
+});
+
+// Sales Router
+Route::middleware([
+    'auth',
+    RoleMiddleware::class . ':admin|cashier', // ⬅️ tambahin begini
+])->group(function () {
+    Route::resource('sales', SalesController::class);
 });
 
 require __DIR__ . '/auth.php';
