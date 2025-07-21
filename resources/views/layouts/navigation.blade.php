@@ -20,7 +20,13 @@
                 @role('admin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
-                        {{ __('Edit User') }}
+                        {{ __('List User') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('items.index')" :active="request()->routeIs('users.*')">
+                        {{ __('List Item') }}
                     </x-nav-link>
                 </div>
                 @endrole
