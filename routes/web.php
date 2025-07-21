@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ItemController;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,14 @@ Route::middleware([
     RoleMiddleware::class . ':admin', // ⬅️ tambahin begini
 ])->group(function () {
     Route::resource('users', UserController::class);
+});
+
+// Items Router
+Route::middleware([
+    'auth',
+    RoleMiddleware::class . ':admin', // ⬅️ tambahin begini
+])->group(function () {
+    Route::resource('items', ItemController::class);
 });
 
 require __DIR__ . '/auth.php';
