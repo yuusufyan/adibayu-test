@@ -12,12 +12,6 @@
           @csrf
 
           <div class="mb-4">
-            <x-input-label for="kode" :value="'Kode Item'" />
-            <x-text-input id="kode" name="kode" type="text" class="mt-1 block w-full" required />
-            <x-input-error :messages="$errors->get('kode')" class="mt-2" />
-          </div>
-
-          <div class="mb-4">
             <x-input-label for="nama" :value="'Nama Item'" />
             <x-text-input id="nama" name="nama" type="text" class="mt-1 block w-full" required />
             <x-input-error :messages="$errors->get('nama')" class="mt-2" />
